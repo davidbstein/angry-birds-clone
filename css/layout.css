@@ -1,0 +1,20 @@
+body {
+  background: url('../images/page-bg.png');
+  background-repeat: repeat-x;
+  /* background-attachment: fixed; */
+
+  /* background-position-y: bottom; */
+}
+
+.main-wrapper {
+  text-align: center;
+}
+
+.game {
+  display: inline-block;
+  width: 900;
+  height: 506;
+  padding: 20px;
+  background-color: rgba(50, 50, 50, 0.5);
+  border-radius: 20px;
+}

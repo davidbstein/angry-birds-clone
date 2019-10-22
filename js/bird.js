@@ -16,6 +16,7 @@ class Bird {
     this.time = 0;
 
     this.isFired = false;
+    this.isPoweringUp = false;
 
     this.createBird();
   }
@@ -52,6 +53,11 @@ class Bird {
     if (this.isFired) {
       this.velocity.y = this.initialVelocity.y - this.gravity * this.time;
     }
+  }
+
+  setPosition(pos) {
+    this.position.x = pos.x - this.width / 4;
+    this.position.y = pos.y - this.height / 4;
   }
 
   animate() {

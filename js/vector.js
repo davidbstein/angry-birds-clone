@@ -14,6 +14,34 @@ class Vector2D {
 
     return Math.sqrt(dx * dx + dy * dy);
   }
+
+  magnitude() {
+    var m = Math.sqrt(this.x * this.x + this.y * this.y);
+    return m;
+  }
+
+  unitVector() {
+    return new Vector2D(this.x / this.magnitude(), this.y / this.magnitude());
+  }
+
+  normal() {
+    var n = new Vector2D(0, 0);
+    n.x = 1;
+    n.y = -(this.x / this.y);
+
+    return n.unitVector();
+  }
+
+  add(other) {
+    var sum = new Vector2D(0, 0);
+    sum.x = this.x + other.x;
+    sum.y = this.y + other.y;
+    return sum;
+  }
+
+  multiply(coefficient) {
+    return new Vector2D(this.x * coefficient, this.y * coefficient);
+  }
 }
 
 // Vector2D.prototype = {

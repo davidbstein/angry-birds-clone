@@ -39,19 +39,43 @@ class Vector2D {
     return sum;
   }
 
-  multiply(coefficient) {
+  subtract(other) {
+    return new Vector2D(this.x - other.x, this.y - other.y);
+  }
+
+  scale(coefficient) {
     return new Vector2D(this.x * coefficient, this.y * coefficient);
+  }
+
+  dot(other) {
+    var d = this.x * other.x + this.y * other.y;
+    return d;
+  }
+
+  cross(other) {
+    var crossProductZ = this.x * other.y - this.y * other.x;
+    return crossProductZ;
+  }
+
+  toString() {
+    return '[' + this.x + ',' + this.y + ']';
+  }
+
+  rotate(angle, axis) {
+    var x = this.x - axis.x;
+    var y = this.y - axis.y;
+
+    var x_prime = axis.x + (x * Math.cos(angle) - y * Math.sin(angle));
+    var y_prime = axis.y + (x * Math.sin(angle) + y * Math.cos(angle));
+
+    return new Vector2D(x_prime, y_prime);
   }
 }
 
-// Vector2D.prototype = {
-//   negative: function() {
-//     this.x = -this.x;
-//     this.y = -this.y;
-//     return this;
-//   }
-// };
+Array.prototype.max = function() {
+  return Math.max.apply(null, this);
+};
 
-// Vector2D.negative = function(v) {
-//   return new Vector2D(-v.x, -v.y);
-// };
+Array.prototype.min = function() {
+  return Math.min.apply(null, this);
+};

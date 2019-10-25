@@ -3,22 +3,42 @@ class Bird {
     this.context = context;
 
     this.position = new Vector2D(posX, posY);
-    this.width = 108;
-    this.height = 100;
+    this.width = 108 / 2;
+    this.height = 100 / 2;
 
     this.velocity = new Vector2D(0, 0);
     this.gravity = 0.0981;
     this.initialVelocity = new Vector2D(0, 0);
+    this.dampingFactor = 0.3;
 
     this.xOffset = 0;
 
     this.frames = 0;
     this.time = 0;
 
+    this.collisionType = 'circle';
     this.isFired = false;
     this.isPoweringUp = false;
+    this.collision = new CollisionBox(
+      this.position,
+      this.width,
+      this.height,
+      1
+    );
 
     this.createBird();
+  }
+
+  getPosition() {
+    return this.position;
+  }
+
+  getWidth() {
+    return this.width;
+  }
+
+  getHeight() {
+    return this.height;
   }
 
   createBird() {
@@ -31,12 +51,12 @@ class Bird {
       this.birdImage,
       this.xOffset,
       0,
-      this.width,
-      this.height,
+      this.width * 2,
+      this.height * 2,
       this.position.x,
       this.position.y,
-      this.width / 2,
-      this.height / 2
+      this.width,
+      this.height
     );
 
     this.update();
@@ -56,8 +76,8 @@ class Bird {
   }
 
   setPosition(pos) {
-    this.position.x = pos.x - this.width / 4;
-    this.position.y = pos.y - this.height / 4;
+    this.position.x = pos.x - this.width / 2;
+    this.position.y = pos.y - this.height / 2;
   }
 
   animate() {
@@ -73,5 +93,32 @@ class Bird {
     this.isFired = true;
 
     this.velocity = initialVelocity;
+  }
+
+  bounce() {
+    this.time = 0;
+    // this.frames = 0;
+    this.initialVelocity.y = Math.abs(this.velocity.y);
+
+    this.velocity.x -= this.dampingFactor;
+    this.initialVelocity.y -= this.initialVelocity.y * this.dampingFactor;
+
+    if (this.velocity.x < this.dampingFactor) this.velocity.x = 0;
+    if (this.velocity.y < this.dampingFactor) this.velocity.y = 0;
+  }
+
+  resolveCollision(otherMat) {
+    this.time = 0;
+    this.initialVelocity.x = Math.abs(this.velocity.x);
+    this.initialVelocity.y = this.velocity.y;
+
+    switch (otherMat) {
+      case 'wood':
+        // this.velocity.x -= this.initialVelocity.x * this.dampingFactor;
+        break;
+      case 'ice':
+        this.velocity.x -= this.initialVelocity.x * this.dampingFactor * 1.5;
+        break;
+    }
   }
 }

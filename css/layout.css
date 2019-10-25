@@ -1,6 +1,8 @@
 body {
   background: url('../images/page-bg.png');
   background-repeat: repeat-x;
+
+  font-family: Arial, Helvetica, sans-serif;
   /* background-attachment: fixed; */
 
   /* background-position-y: bottom; */
@@ -8,6 +10,16 @@ body {
 
 .main-wrapper {
   text-align: center;
+}
+
+.title {
+  width: 100px;
+  margin: auto;
+}
+
+img {
+  width: 100%;
+  height: auto;
 }
 
 .game {

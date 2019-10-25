@@ -7,6 +7,9 @@ class LineRenderer {
 
     this.direction = new Vector2D(0, 0);
     this.shouldDrawLine = false;
+
+    this.lineLength = 20;
+    this.lineColor = '#ff0';
   }
 
   draw() {
@@ -21,20 +24,12 @@ class LineRenderer {
     this.context.setLineDash([5, 15]);
     this.context.moveTo(this.startPos.x, this.startPos.y);
     this.context.lineTo(
-      this.startPos.x + this.direction.x * 20,
-      this.startPos.y + this.direction.y * 20
+      this.startPos.x + this.direction.x * this.lineLength,
+      this.startPos.y + this.direction.y * this.lineLength
     );
-    this.context.strokeStyle = '#d00';
+
+    this.context.strokeStyle = this.lineColor;
     this.context.lineWidth = 2;
-    this.context.stroke();
-  }
-
-  drawCircle() {
-    this.context.beginPath();
-
-    var arcCenter = this.startPos.add(this.direction.normal().multiply(200));
-    console.log(arcCenter);
-    this.context.arc(arcCenter.x, arcCenter.y, 200, (-90 * Math.PI) / 180, 0);
     this.context.stroke();
   }
 

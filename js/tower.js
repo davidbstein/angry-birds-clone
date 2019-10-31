@@ -4,8 +4,10 @@ class Tower {
 
     this.position = new Vector2D(700, 475);
     this.components = [];
+    this.pigs = [];
 
     this.createComponents();
+    this.createPigs();
   }
 
   createComponents() {
@@ -48,11 +50,32 @@ class Tower {
       false
     );
     this.components.push(base4);
+
+    var base4 = new Pole(
+      this.context,
+      this.position,
+      new Vector2D(80, 200),
+      'wood',
+      1,
+      false
+    );
+    this.components.push(base4);
+  }
+
+  createPigs() {
+    var pig1 = new Pig(this.context, this.position, 20, 80, 'normal');
+    this.components.push(pig1);
   }
 
   draw() {
     for (let i = 0; i < this.components.length; i++) {
       const element = this.components[i];
+
+      element.draw();
+    }
+
+    for (let i = 0; i < this.pigs.length; i++) {
+      const element = this.pigs[i];
 
       element.draw();
     }

@@ -15,12 +15,14 @@ class Game {
     this.bg = new Background(this.context, this.gameWidth, this.gameHeight);
     this.ground = new Ground(this.context);
     this.catapult = new Catapult(this.context);
-    this.bird = new Bird(this.context, 100, 375);
+    this.birds = [];
+    this.createBirds(3);
+    this.currentBirdIndex = 0;
+
     this.tower = new Tower(this.context);
     this.lineRenderer = new LineRenderer(this.context);
 
-    this.collisionObjects = [];
-    this.setCollisionObjects();
+    this.score = new Score(this.context, this.gameWidth);
 
     this.audio = new Audio();
     this.audio.backgroundSound('./audio/music.mp3');
@@ -37,13 +39,15 @@ class Game {
     this.handleInputs();
   }
 
-  setCollisionObjects() {
-    this.collisionObjects.push(this.bird);
-    this.collisionObjects.push(this.ground);
-    for (let i = 0; i < this.tower.components.length; i++) {
-      const element = this.tower.components[i];
-      this.collisionObjects.push(element);
+  createBirds(n) {
+    for (let i = 0; i < n; i++) {
+      var b = new Bird(this.context, 50 * (i - 1), 425, 'red');
+      this.birds.push(b);
     }
+
+    // console.log(this.birds[this.currentBirdIndex].load());
+    this.birds[0].load();
+    this.bird = this.birds[0];
   }
 
   handleInputs() {
@@ -131,13 +135,20 @@ class Game {
     this.catapult.drawBackImage();
     this.lineRenderer.draw();
     this.ground.draw();
-    this.bird.draw();
-    this.tower.draw();
+
+    for (let i = 0; i < this.birds.length; i++) {
+      const element = this.birds[i];
+      element.draw();
+    }
+
     this.catapult.drawFrontImage();
+    this.tower.draw();
+    this.score.showScore();
 
     this.context.fillText(this.currentFps, 0, 0);
 
     this.detectCollision();
+    this.queueBird();
 
     // requestAnimationFrame(this.loop.bind(this));
   }
@@ -148,7 +159,36 @@ class Game {
     for (let i = 0; i < this.tower.components.length; i++) {
       const element = this.tower.components[i];
 
-      element.detectCollision(this.collisionObjects);
+      if (element.collisionType == 'box') {
+        element.detectCollision(
+          this.tower.components,
+          this.bird,
+          this.ground,
+          this.score
+        );
+      }
+    }
+  }
+
+  queueBird() {
+    if (this.bird.isStationary()) {
+      // for (let i = 0; i < this.birds.length; i++) {
+      //   if (this.bird == this.birds[i]) {
+      //     this.birds.splice(i, 1);
+      //     if (i < this.birds.length - 1) this.bird = this.birds[i + 1];
+      //     break;
+      //   }
+      // }
+
+      if (this.birds.length <= 1) {
+        this.gameOver = true;
+        return;
+      }
+
+      this.birds.splice(0, 1);
+      this.bird = this.birds[0];
+
+      this.bird.load();
     }
   }
 }

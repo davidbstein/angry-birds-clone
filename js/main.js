@@ -27,7 +27,8 @@ class Main {
   handleInputs() {}
 
   loop() {
-    if (this.mainMenu.isPlayButtonClicked()) this.state = 'game';
+    if (this.state == 'main-menu' && this.mainMenu.isPlayButtonClicked())
+      this.state = 'game';
 
     if (this.state == 'main-menu') {
       this.mainMenu.draw();

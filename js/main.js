@@ -17,7 +17,7 @@ class Main {
       this.gameWidth,
       this.gameHeight
     );
-    this.game = new Game(this.canvas);
+    this.game = null;
 
     this.state = 'main-menu';
 
@@ -27,8 +27,10 @@ class Main {
   handleInputs() {}
 
   loop() {
-    if (this.state == 'main-menu' && this.mainMenu.isPlayButtonClicked())
+    if (this.state == 'main-menu' && this.mainMenu.isPlayButtonClicked()) {
       this.state = 'game';
+      this.game = new Game(this.canvas);
+    }
 
     if (this.state == 'main-menu') {
       this.mainMenu.draw();

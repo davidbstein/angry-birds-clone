@@ -115,6 +115,14 @@ class Pole {
       return;
     }
 
+    if (
+      ground.collision.topLeft.y < this.collision.bottomLeft.y &&
+      ground.collision.bottomLeft.y > this.collision.topLeft.y
+    ) {
+      console.log('collided');
+      this.initBoxCollision(ground);
+    }
+
     if (this.getLowestVertex.y > ground.position.y) {
       this.collision.omega = -this.collision.omega;
       // this.collision.m = 0;

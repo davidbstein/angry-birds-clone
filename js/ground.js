@@ -10,7 +10,7 @@ class Ground {
     this.collision = new CollisionBox(
       this.position,
       3 * this.groundImage.width,
-      this.groundImage.height,
+      this.groundImage.height * 10,
       1
     );
   }

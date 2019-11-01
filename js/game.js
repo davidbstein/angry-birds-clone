@@ -15,6 +15,29 @@ class Game {
     this.bg = new Background(this.context, this.gameWidth, this.gameHeight);
     this.ground = new Ground(this.context);
     this.catapult = new Catapult(this.context);
+
+    this.audio = new Audio();
+    this.audio.backgroundSound('./audio/music.mp3');
+
+    this.gameOver = new GameOver(
+      this.context,
+      this.position,
+      this.gameWidth,
+      this.gameHeight
+    );
+    this.state = 'Playing';
+
+    this.handleInputs();
+
+    this.reset();
+
+    // this.loop();
+  }
+
+  reset() {
+    var loadingImage = new Image();
+    loadingImage.src = './images/loading.gif';
+
     this.birds = [];
     this.createBirds(3);
     this.currentBirdIndex = 0;
@@ -24,19 +47,12 @@ class Game {
 
     this.score = new Score(this.context, this.gameWidth);
 
-    this.audio = new Audio();
-    this.audio.backgroundSound('./audio/music.mp3');
-
     this.maxVelocity = new Vector2D(10, 10);
     this.currentVelocity = new Vector2D(0, 0);
     this.firstClickPosition = new Vector2D(0, 0);
 
     this.previousX = 0;
     this.previousY = 0;
-
-    // this.loop();
-
-    this.handleInputs();
   }
 
   createBirds(n) {
@@ -136,19 +152,30 @@ class Game {
     this.lineRenderer.draw();
     this.ground.draw();
 
-    for (let i = 0; i < this.birds.length; i++) {
-      const element = this.birds[i];
-      element.draw();
+    if (this.state == 'Playing') {
+      for (let i = 0; i < this.birds.length; i++) {
+        const element = this.birds[i];
+        element.draw();
+      }
+
+      this.catapult.drawFrontImage();
+      this.tower.draw();
+      this.score.showScore();
+
+      this.context.fillText(this.currentFps, 0, 0);
+
+      this.detectCollision();
+      this.queueBird();
+    } else if (this.state == 'GameOver') {
+      this.gameOver.draw();
+
+      if (this.gameOver.restartClicked) {
+        this.state = 'Playing';
+        this.gameOver.isGameOver = false;
+        this.gameOver.restartClicked = false;
+        this.reset();
+      }
     }
-
-    this.catapult.drawFrontImage();
-    this.tower.draw();
-    this.score.showScore();
-
-    this.context.fillText(this.currentFps, 0, 0);
-
-    this.detectCollision();
-    this.queueBird();
 
     // requestAnimationFrame(this.loop.bind(this));
   }
@@ -181,7 +208,13 @@ class Game {
       // }
 
       if (this.birds.length <= 1) {
-        this.gameOver = true;
+        this.state = 'GameOver';
+        this.gameOver.isGameOver = true;
+        this.gameOver.restartClicked = false;
+
+        this.score.setHighScore();
+        // this.reset();
+
         return;
       }
 

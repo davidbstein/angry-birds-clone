@@ -50,16 +50,6 @@ class Tower {
       false
     );
     this.components.push(base4);
-
-    var base4 = new Pole(
-      this.context,
-      this.position,
-      new Vector2D(80, 200),
-      'wood',
-      1,
-      false
-    );
-    this.components.push(base4);
   }
 
   createPigs() {
